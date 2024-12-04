@@ -3,22 +3,22 @@ package com.anilkumawat.project.uberApp.entities;
 import com.anilkumawat.project.uberApp.entities.enums.PaymentMethod;
 import com.anilkumawat.project.uberApp.entities.enums.RideRequestStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name = "app_ride_request")
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@ToString
 public class RideRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

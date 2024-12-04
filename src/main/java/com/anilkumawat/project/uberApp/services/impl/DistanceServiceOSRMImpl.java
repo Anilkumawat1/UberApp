@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DistanceServiceOSRMImpl implements DistanceService {
+    // we will call the osrm api for distance calculation
     @Override
     public double calculateDistance(Point src, Point dest) {
         return 0;
