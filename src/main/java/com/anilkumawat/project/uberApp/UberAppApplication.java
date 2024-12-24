@@ -9,9 +9,6 @@ public class UberAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(UberAppApplication.class, args);
-		SignUpDto signupDto = new SignUpDto("","","a");
-		System.out.println(signupDto.getPassword());
-
 	}
 
 }

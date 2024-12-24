@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 public class RideDto {
 
     private Long id;
-    private Point pickLocation;
-    private Point dropLocation;
-    private Rider rider;
-    private Driver driver;
+    private PointDto pickLocation;
+    private PointDto dropLocation;
+    private RiderDto rider;
+    private DriverDto driver;
 
     private Double fare;
 

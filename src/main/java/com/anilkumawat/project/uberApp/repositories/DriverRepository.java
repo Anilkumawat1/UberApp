@@ -9,9 +9,15 @@ import java.util.List;
 
 public interface DriverRepository extends JpaRepository<Driver,Long> {
 
-    @Query(value = "Select d.*,ST_Distance(d.currentLocation,:pickLocation) as distance "
+    @Query(value = "Select d.*,ST_Distance(d.current_location,:pickLocation) as distance "
     +"from app_driver as d "+
-            "WHERE d.isAvailable = true AND ST_DWithin(d.currentLocation,:pickLocation,1000) "+
+            "WHERE d.is_available = true AND ST_DWithin(d.current_location,:pickLocation,1000) "+
             "ORDER BY distance LIMIT 10",nativeQuery = true)
-    List<Driver> findMatchingDriver(Point pickLocation);
+    List<Driver> findTenNearestDriver(Point pickLocation);
+
+    @Query(value = "Select d.*,ST_Distance(d.current_location,:pickLocation) as distance "
+            +"from app_driver as d "+
+            "WHERE d.is_available = true AND ST_DWithin(d.current_location,:pickLocation,1500) "+
+            "ORDER BY d.rating DESC LIMIT 10",nativeQuery = true)
+    List<Driver> findTenNearestAndTopRatedDriver(Point pickLocation);
 }

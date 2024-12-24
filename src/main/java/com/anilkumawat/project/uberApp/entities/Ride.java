@@ -51,4 +51,5 @@ public class Ride {
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
 
+
 }
