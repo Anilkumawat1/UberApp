@@ -1,10 +1,7 @@
 package com.anilkumawat.project.uberApp.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 @Entity
@@ -13,6 +10,7 @@ import org.locationtech.jts.geom.Point;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +25,5 @@ public class Driver {
 
     @Column(columnDefinition = "Geometry(Point, 4326)")
     private Point currentLocation;
-
     private String vehicleId;
 }

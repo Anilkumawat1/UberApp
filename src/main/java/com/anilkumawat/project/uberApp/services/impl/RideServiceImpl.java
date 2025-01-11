@@ -66,26 +66,26 @@ public class RideServiceImpl implements RideService {
         return rideRepository.findByDriver(driver,pageRequest);
     }
 
-    @Override
-    public Rider rateRider(Rider rider, Integer rating) {
-        int total_ride = rideRepository.findTotalRideOfRider(rider.getId());
-        double new_rating = (total_ride*rider.getRating() + rating)/(total_ride+1);
-        rider.setRating(new_rating);
-        return riderRepository.save(rider);
-    }
+//    @Override
+//    public Rider rateRider(Rider rider, Integer rating) {
+//        int total_ride = rideRepository.findTotalRideOfRider(rider.getId());
+//        double new_rating = (total_ride*rider.getRating() + rating)/(total_ride+1);
+//        rider.setRating(new_rating);
+//        return riderRepository.save(rider);
+//    }
 
     @Override
     public Ride update(Ride ride) {
         return rideRepository.save(ride);
     }
 
-    @Override
-    public Driver rateDriver(Driver driver,Integer rating) {
-        int total_ride = rideRepository.findTotalRideOfDriver(driver.getId());
-        double new_rating = (total_ride*driver.getRating() + rating) / (total_ride + 1);
-        driver.setRating(new_rating);
-        return driverRepository.save(driver);
-    }
+//    @Override
+//    public Driver rateDriver(Driver driver,Integer rating) {
+//        int total_ride = rideRepository.findTotalRideOfDriver(driver.getId());
+//        double new_rating = (total_ride*driver.getRating() + rating) / (total_ride + 1);
+//        driver.setRating(new_rating);
+//        return driverRepository.save(driver);
+//    }
 
     private String generateOtp(){
         Random random = new Random();

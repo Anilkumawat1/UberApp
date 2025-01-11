@@ -17,9 +17,7 @@ public class ApiResponseDto<T> {
     }
     public ApiResponseDto(T data){
         this();
-
         this.data = data;
-        System.out.println(this.getData());
     }
 
 }

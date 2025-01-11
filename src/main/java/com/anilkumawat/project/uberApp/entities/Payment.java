@@ -3,10 +3,7 @@ package com.anilkumawat.project.uberApp.entities;
 import com.anilkumawat.project.uberApp.entities.enums.PaymentMethod;
 import com.anilkumawat.project.uberApp.entities.enums.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +26,4 @@ public class Payment {
     private PaymentStatus paymentStatus;
     private Double amount;
     private LocalDateTime paymentTime;
-
 }

@@ -7,17 +7,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "app_ride")
+@Table(name = "app_ride",
+indexes={
+        @Index(name = "idx_ride_rider",columnList = "rider_id"),
+        @Index(name = "idx_ride_driver",columnList = "driver_id")
+
+})
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Ride {
 
     @Id
@@ -38,6 +45,8 @@ public class Ride {
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
+    @CreationTimestamp
+    private LocalDateTime creationTime;
     private Double fare;
 
     private String otp;

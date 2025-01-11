@@ -3,6 +3,9 @@ package com.anilkumawat.project.uberApp.controllers;
 import com.anilkumawat.project.uberApp.dto.*;
 import com.anilkumawat.project.uberApp.services.RiderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +34,12 @@ public class RiderController {
     @GetMapping(path = "/getMyProfile")
     private ResponseEntity<RiderDto> getMyProfile(){
         return ResponseEntity.ok(riderService.getMyProfile());
+    }
+
+    @GetMapping(path = "/getAllMyRides")
+    private ResponseEntity<Page<RideDto>> getAllMyRides(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size){
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC,"creationTime","id"));
+        return ResponseEntity.ok(riderService.getAllMyRides(pageRequest));
     }
 }

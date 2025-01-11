@@ -35,6 +35,16 @@ public class GlobalExceptionHandler {
                 .build();
         return buildErrorResponse(apiErrorDto);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponseDto<?>> handleInternalServerError(Exception exception) {
+        ApiErrorDto apiError = ApiErrorDto.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .message(exception.getMessage())
+                .build();
+        return buildErrorResponse(apiError);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponseDto<?>> MethodArgumentNotValidException(MethodArgumentNotValidException e){
         List<String> error = e
@@ -51,9 +61,11 @@ public class GlobalExceptionHandler {
                 .message("Input validation failed")
                 .build();
 
+
         return buildErrorResponse(apiErrorDto);
 
     }
+
     public ResponseEntity<ApiResponseDto<?>> buildErrorResponse(ApiErrorDto apiErrorDto){
         return new ResponseEntity<>(new ApiResponseDto<>(apiErrorDto), apiErrorDto.getStatus());
     }

@@ -11,4 +11,5 @@ import lombok.Setter;
 @Setter
 public class RatingDto {
     private Integer rating;
+    private Long rideId;
 }

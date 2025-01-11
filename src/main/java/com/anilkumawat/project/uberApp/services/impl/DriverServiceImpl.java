@@ -6,23 +6,20 @@ import com.anilkumawat.project.uberApp.dto.RiderDto;
 import com.anilkumawat.project.uberApp.entities.Driver;
 import com.anilkumawat.project.uberApp.entities.Ride;
 import com.anilkumawat.project.uberApp.entities.RideRequest;
+import com.anilkumawat.project.uberApp.entities.User;
 import com.anilkumawat.project.uberApp.entities.enums.RideRequestStatus;
 import com.anilkumawat.project.uberApp.entities.enums.RideStatus;
 import com.anilkumawat.project.uberApp.exceptions.ResourceNotFoundException;
 import com.anilkumawat.project.uberApp.repositories.DriverRepository;
-import com.anilkumawat.project.uberApp.services.DriverService;
-import com.anilkumawat.project.uberApp.services.RideRequestService;
-import com.anilkumawat.project.uberApp.services.RideService;
+import com.anilkumawat.project.uberApp.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +28,9 @@ public class DriverServiceImpl implements DriverService {
     private final RideRequestService rideRequestService;
     private final DriverRepository driverRepository;
     private final RideService rideService;
+    private final PaymentService paymentService;
     private final ModelMapper modelMapper;
+    private final RatingService ratingService;
     @Override
     @Transactional
     public RideDto acceptRide(Long rideRequestId) {
@@ -79,12 +78,30 @@ public class DriverServiceImpl implements DriverService {
             throw new RuntimeException("Otp is not valid ,otp: "+otp);
         }
         ride.setStartedAt(LocalDateTime.now());
+        paymentService.createPayment(ride);
+        ratingService.createNewRating(ride);
         return modelMapper.map(rideService.updateRideStatus(ride,RideStatus.ONGOING),RideDto.class);
     }
 
     @Override
+    @Transactional
     public RideDto endRide(Long rideId) {
-        return null;
+        Ride ride = rideService.getRideById(rideId);
+        Driver currentDriver = getCurrentDriver();
+
+        if(!currentDriver.equals(ride.getDriver())){
+            throw new RuntimeException("Driver cannot start a ride as he has not accepted earlier");
+        }
+
+        if(!ride.getRideStatus().equals(RideStatus.ONGOING)){
+            throw new RuntimeException("Ride status is not Ongoing hence cannot be ended ,status: "+ride.getRideStatus());
+        }
+        ride.setEndedAt(LocalDateTime.now());
+        Ride savedRide = rideService.updateRideStatus(ride,RideStatus.ENDED);
+        updateAvailability(currentDriver,true);
+        paymentService.processPayment(savedRide);
+
+        return modelMapper.map(savedRide,RideDto.class);
     }
 
     @Override
@@ -97,7 +114,7 @@ public class DriverServiceImpl implements DriverService {
         if(!ride.getRideStatus().equals(RideStatus.ENDED)){
             throw new RuntimeException("Ride is not ended hence you can't rate, status : "+ride.getRideStatus());
         }
-        return modelMapper.map(rideService.rateRider(ride.getRider(),rating),RiderDto.class);
+        return ratingService.rateRider(ride,rating);
     }
 
     @Override
@@ -118,10 +135,18 @@ public class DriverServiceImpl implements DriverService {
         driver.setIsAvailable(availability);
         return driverRepository.save(driver);
     }
-
     @Override
     public Driver getCurrentDriver() {
         //this will be implemented letter by using spring security
         return driverRepository.findById(2L).orElseThrow(()-> new ResourceNotFoundException("Driver not found"));
+    }
+
+    @Override
+    public Driver createNewDriver(User user) {
+        Driver driver = Driver.builder()
+                .user(user)
+                .isAvailable(true)
+                .build();
+        return driverRepository.save(driver);
     }
 }

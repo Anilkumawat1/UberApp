@@ -22,8 +22,8 @@ public interface RideService {
 
     Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest);
 
-    Rider rateRider(Rider rider, Integer rating);
+    //Rider rateRider(Rider rider, Integer rating);
     Ride update(Ride ride);
 
-    Driver rateDriver(Driver driver,Integer rating);
+    //Driver rateDriver(Driver driver,Integer rating);
 }

@@ -11,6 +11,7 @@ import com.anilkumawat.project.uberApp.exceptions.ResourceNotFoundException;
 import com.anilkumawat.project.uberApp.repositories.RideRequestRepository;
 import com.anilkumawat.project.uberApp.repositories.RiderRepository;
 import com.anilkumawat.project.uberApp.services.DriverService;
+import com.anilkumawat.project.uberApp.services.RatingService;
 import com.anilkumawat.project.uberApp.services.RideService;
 import com.anilkumawat.project.uberApp.services.RiderService;
 
@@ -38,6 +39,7 @@ public class RiderServiceImpl implements RiderService {
     private final RideStrategyManager rideStrategyManager;
     private final RideService rideService;
     private final DriverService driverService;
+    private final RatingService ratingService;
 
     @Override
     @Transactional
@@ -80,7 +82,7 @@ public class RiderServiceImpl implements RiderService {
         if(!ride.getRideStatus().equals(RideStatus.ENDED)){
             throw new RuntimeException("Ride is not ended hence can't rate, invalid status :"+ride.getRideStatus());
         }
-        return modelMapper.map(rideService.rateDriver(ride.getDriver(),rating),DriverDto.class);
+        return ratingService.rateDriver(ride,rating);
     }
 
     @Override

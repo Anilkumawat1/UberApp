@@ -5,6 +5,7 @@ import com.anilkumawat.project.uberApp.dto.DriverDto;
 import com.anilkumawat.project.uberApp.dto.RideDto;
 import com.anilkumawat.project.uberApp.dto.RiderDto;
 import com.anilkumawat.project.uberApp.entities.Driver;
+import com.anilkumawat.project.uberApp.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,4 +31,6 @@ public interface DriverService {
     Driver updateAvailability(Driver driver,boolean availability);
 
     Driver getCurrentDriver();
+
+    Driver createNewDriver(User user);
 }
