@@ -5,8 +5,11 @@ import com.anilkumawat.project.uberApp.dto.ApiErrorDto;
 import com.anilkumawat.project.uberApp.dto.ApiResponseDto;
 import com.anilkumawat.project.uberApp.exceptions.ResourceNotFoundException;
 import com.anilkumawat.project.uberApp.exceptions.RuntimeConflictException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,6 +44,33 @@ public class GlobalExceptionHandler {
         ApiErrorDto apiError = ApiErrorDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(exception.getMessage())
+                .build();
+        return buildErrorResponse(apiError);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponseDto<?>> handleAuthenticationException(AuthenticationException ex) {
+        ApiErrorDto apiError = ApiErrorDto.builder()
+                .status(HttpStatus.UNAUTHORIZED)
+                .message(ex.getMessage())
+                .build();
+        return buildErrorResponse(apiError);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponseDto<?>> handleJwtException(JwtException ex) {
+        ApiErrorDto apiError = ApiErrorDto.builder()
+                .status(HttpStatus.UNAUTHORIZED)
+                .message(ex.getMessage())
+                .build();
+        return buildErrorResponse(apiError);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponseDto<?>> handleAccessDeniedException(AccessDeniedException ex) {
+        ApiErrorDto apiError = ApiErrorDto.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .message(ex.getMessage())
                 .build();
         return buildErrorResponse(apiError);
     }

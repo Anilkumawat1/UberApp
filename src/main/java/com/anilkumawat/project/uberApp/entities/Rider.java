@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Rider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

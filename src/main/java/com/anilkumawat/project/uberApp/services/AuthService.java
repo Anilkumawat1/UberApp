@@ -1,14 +1,14 @@
 package com.anilkumawat.project.uberApp.services;
 
-import com.anilkumawat.project.uberApp.dto.DriverDto;
-import com.anilkumawat.project.uberApp.dto.SignUpDto;
-import com.anilkumawat.project.uberApp.dto.UserDto;
+import com.anilkumawat.project.uberApp.dto.*;
 
 public interface AuthService {
 
-    String login(String email, String password);
+    String[] login(LoginRequestDto loginRequestDto);
 
     UserDto signup(SignUpDto signupDto);
 
     DriverDto onboardNewDriver(Long userId);
+
+    String refreshToken(String refreshToken);
 }

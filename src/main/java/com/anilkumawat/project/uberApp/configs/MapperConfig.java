@@ -17,6 +17,7 @@ public class MapperConfig {
             PointDto pointDto = mappingContext.getSource();
             return GeometryUtil.createPoint(pointDto);
         });
+
         modelMapper.typeMap(Point.class,PointDto.class).setConverter(mappingContext -> {
             Point point = mappingContext.getSource();
             double []coordinates = {point.getX(),point.getY()};
@@ -24,5 +25,6 @@ public class MapperConfig {
             return pointDto;
         });
         return modelMapper;
+
     }
 }
